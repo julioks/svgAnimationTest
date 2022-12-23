@@ -1,0 +1,27 @@
+line{
+    color: rgb(176, 10, 46);
+    stroke-width: 5;
+    transition: smooth 5s;
+}
+h1{
+    font-family: 'Open Sans', sans-serif;
+ margin: 0;
+ position: fixed; /* or absolute */
+  top: 50%;
+  left: 50%;
+  color: rgb(23, 22, 22);
+  font-size: min(33vh,45vw);
+  transform: translate(-50%, -50%);
+}
+svg{
+    position: absolute; 
+}
+body{
+    transition: smooth 2s;
+    margin: 0;
+    background-color: rgb(23, 22, 22);
+}
+.lineclass{
+    stroke: rgb(176, 10, 46);
+    stroke-width: 1px;
+}
