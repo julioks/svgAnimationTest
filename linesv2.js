@@ -107,7 +107,6 @@ function yFromX(x1,y1,x2t,y2t,nx) {
     y1=parseFloat(y1);
     y2=parseFloat(y2);
     var maindistance=calcDistance(x1,x2,y1,y2)
-    console.log(distance/maindistance*(y2-y1))
     return y1+((distance/maindistance)*(y2-y1))
   }
   function ytarget(a,x1,x2,y1,y2){
@@ -128,43 +127,118 @@ function yFromX(x1,y1,x2t,y2t,nx) {
   }
 function makeRepeatingLines(sourceLine,repeatedLine,incerment){
   //check which part is shared
-  var newx1,newx2,newy1,newy2
-  if (sourceLine.getAttribute("x2")==repeatedLine.getAttribute("x2")) {
-    newx2=sourceLine.getAttribute("x2")
+  var newx1,newx2,newy1,newy2,size
+  if (parseFloat( sourceLine.getAttribute("x2"))==parseFloat( repeatedLine.getAttribute("x2"))) {
+    newx2=parseFloat( sourceLine.getAttribute("x2"))
+    size=JSON.parse(JSON.stringify(Math.abs(newx2-sourceLine.getAttribute("x1")))) 
+    console.log("xissame",newx2)
   }
   else{
-    newy2=sourceLine.getAttribute("y2")
+    newy2=parseFloat( sourceLine.getAttribute("y2"))
+    size=JSON.parse(JSON.stringify(Math.abs(newy2-sourceLine.getAttribute("y1")))) 
+    console.log("yissame",newy2)
   }
-  //get x1 and y1
-  newx1=xFromDistance(sourceLine.getAttribute("x1"),
-  sourceLine.getAttribute("x2"),
-  sourceLine.getAttribute("y1"),
-  sourceLine.getAttribute("y2"),
-  incerment)
-  newy1=yFromDistance(sourceLine.getAttribute("x1"),
-  sourceLine.getAttribute("x2"),
-  sourceLine.getAttribute("y1"),
-  sourceLine.getAttribute("y2"),
-  incerment)
+  var retLines=[]
+ 
+  for (let i = 0; i < size/incerment; i++) {
+    if (parseFloat( sourceLine.getAttribute("x2"))==parseFloat( repeatedLine.getAttribute("x2"))) {
+      newx2=parseFloat( sourceLine.getAttribute("x2"))
+      size=JSON.parse(JSON.stringify(Math.abs(newx2-sourceLine.getAttribute("x1")))) 
+      console.log("xissame",newx2)
+    }
+    else{
+      newy2=parseFloat( sourceLine.getAttribute("y2"))
+      size=JSON.parse(JSON.stringify(Math.abs(newy2-sourceLine.getAttribute("y1")))) 
+      console.log("yissame",newy2)
+    }
+     //get x1 and y1
+  newx1=xFromDistance(parseFloat( sourceLine.getAttribute("x1")),
+  parseFloat( sourceLine.getAttribute("x2")),
+  parseFloat( sourceLine.getAttribute("y1")),
+  parseFloat( sourceLine.getAttribute("y2")),
+  incerment*i)
+  newy1=yFromDistance(parseFloat( sourceLine.getAttribute("x1")),
+  parseFloat( sourceLine.getAttribute("x2")),
+  parseFloat( sourceLine.getAttribute("y1")),
+  parseFloat( sourceLine.getAttribute("y2")),
+  incerment*i)
+  
   //get the slope of the line to be repeated
-  var slope = ( parseFloat( sourceLine.getAttribute("y2"))  -   sourceLine.getAttribute("y1")
-  ) / (  sourceLine.getAttribute("x2")
-  - sourceLine.getAttribute("x1"));
-  //solve for the remaining one
-  if(newx2==null){
-    newx2=newx1+Math.sqrt(Math.pow(slope,2)-Math.pow((newy2-newy1),2))
+  var slope = ( parseFloat( repeatedLine.getAttribute("y2"))  -   repeatedLine.getAttribute("y1")) / (  repeatedLine.getAttribute("x2") - repeatedLine.getAttribute("x1"));
+  if (!isFinite(slope)) {
+    newx1=xFromDistance(parseFloat( sourceLine.getAttribute("x1")),
+    parseFloat( sourceLine.getAttribute("x2")),
+    parseFloat( sourceLine.getAttribute("y1")),
+    parseFloat( sourceLine.getAttribute("y2")),
+    incerment*i)
+    newy1=yFromDistance(parseFloat( sourceLine.getAttribute("x1")),
+    parseFloat( sourceLine.getAttribute("x2")),
+    parseFloat( sourceLine.getAttribute("y1")),
+    parseFloat( sourceLine.getAttribute("y2")),
+    incerment*i)
+    
+    slope=Math.sign(slope)
+      if (newx2==null) {
+        newx2=JSON.parse(JSON.stringify(newx1))
+      }
+      else{
+        newy2=JSON.parse(JSON.stringify(newy1))
+      }
+
+   
+
+     
+       /*newy2=parseFloat( repeatedLine.getAttribute("y2"))+(incerment*i*slope)
+      console.log("y2",parseFloat( repeatedLine.getAttribute("y2"))+(incerment*i*slope))*/
+     
   }
   else{
-    newy2=newx2=newx1+newy1
+//solve for the remaining one
+if(newx2==null){
+   
+  newx2=((slope*newx1)-newy1+newy2)/slope
+ }
+ else{
+ 
+   newy2=slope*(newx2-newx1)+newy1
+ 
+ }
   }
-  return makeSingleLine(newx1,newx2,newy1,newy2)
+  
+  retLines.push(makeSingleLine(newx1,newx2,newy1,newy2))
+  newx1=null;
+  newx2=null;
+  newy1=null;
+  newy2=null;
+  }
+
+
+  return retLines
 
 }
 makeBaseLines();
 //makeEightLines();
 drawLines(mlines);
-console.log(makeRepeatingLines(mlines[0],mlines[1],10))
+//console.log(makeRepeatingLines(mlines[0],mlines[1],10))
 drawLines(makeRepeatingLines(mlines[0],mlines[1],10))
-//drawLines(horShift(mlines[1],10))
+drawLines(makeRepeatingLines(mlines[1],mlines[2],10))
+drawLines(makeRepeatingLines(mlines[2],mlines[3],10))
+drawLines(makeRepeatingLines(mlines[3],mlines[4],10))
+drawLines(makeRepeatingLines(mlines[4],mlines[5],10))
+drawLines(makeRepeatingLines(mlines[5],mlines[6],10))
+drawLines(makeRepeatingLines(mlines[6],mlines[7],10))
+drawLines(makeRepeatingLines(mlines[7],mlines[0],10))
+
+drawLines(makeRepeatingLines(mlines[0],mlines[7],10))
+drawLines(makeRepeatingLines(mlines[1],mlines[0],10))
+drawLines(makeRepeatingLines(mlines[2],mlines[1],10))
+drawLines(makeRepeatingLines(mlines[3],mlines[2],10))
+drawLines(makeRepeatingLines(mlines[4],mlines[3],10))
+drawLines(makeRepeatingLines(mlines[5],mlines[4],10))
+drawLines(makeRepeatingLines(mlines[6],mlines[5],10))
+drawLines(makeRepeatingLines(mlines[7],mlines[6],10))
+
+
+//drawLines(horShift(mlines[1],10)
 
 
