@@ -49,23 +49,7 @@ function makeBaseLines() {
     0));
   
 }
-function makePartLines(line1,line2,increment){
-    var returnLines=[];
-    var newx1,newx2t,newy1,newy2t,newline
-    newx1=xFromDistance(line1.getAttribute("x1"),
-    line1.getAttribute("x2t"),
-    line1.getAttribute("y1"),
-    line1.getAttribute("y2t"),
-    increment
-    )
-    newx2t
 
-    for (let i = 0; i < Math.trunc( line1.getAttribute("x")/increment); i++) {
-        returnLines.push( makeSingleLine(x1,x2,window.innerHeight-interval*i,window.innerHeight-interval*i))
-     }
-
-    return returnLines
-}
 function drawLines(lines) {
     lines.forEach(element => {
         vbox.append(element)
@@ -142,35 +126,45 @@ function yFromX(x1,y1,x2t,y2t,nx) {
   function calcDistance(x1,x2,y1,y2) {
     return Math.sqrt((Math.pow((x2-x1),2)+Math.pow((y2-y1),2)))
   }
-  function makeRepeatingLines(prevLine,selfLine,nextLine,distanceInc){
-   var nextdist=distanceInc
-   var neighx1=prevLine.getAttribute("x1");
-   var neighx2=prevLine.getAttribute("x2");
-   var neighy1=prevLine.getAttribute("y1");
-   var neighy2=prevLine.getAttribute("y2");
-   var selfx1=selfLine.getAttribute("x1");
-   var selfx2=selfLine.getAttribute("x2");
-   var selfy1=selfLine.getAttribute("y1");
-   var selfy2=selfLine.getAttribute("y2");
-   var addlines=[]
-    while (nextdist<calcDistance(neighx1,neighx2,neighy1,neighy2)) {
-    var newx1=xFromDistance(neighx1,neighx2,neighy1,neighy2,nextdist)
-    var newy1=yFromDistance(neighx1,neighx2,neighy1,neighy2,nextdist)
-    //var newx2=xtarget(neighx1,neighx2,neighy1,neighy2,newx1,newy1)
-    var newy2=ytarget(newx1,selfx1,selfx2,selfy1,selfy2)
-
-    addlines.push(makeSingleLine(newx1,newx1,newy1,newy2))
-    nextdist=nextdist+distanceInc
-    //console.log(xFromDistance(neighx1,neighx2,neighy1,neighy2,nextdist))
-}
-return addlines
+function makeRepeatingLines(sourceLine,repeatedLine,incerment){
+  //check which part is shared
+  var newx1,newx2,newy1,newy2
+  if (sourceLine.getAttribute("x2")==repeatedLine.getAttribute("x2")) {
+    newx2=sourceLine.getAttribute("x2")
   }
+  else{
+    newy2=sourceLine.getAttribute("y2")
+  }
+  //get x1 and y1
+  newx1=xFromDistance(sourceLine.getAttribute("x1"),
+  sourceLine.getAttribute("x2"),
+  sourceLine.getAttribute("y1"),
+  sourceLine.getAttribute("y2"),
+  incerment)
+  newy1=yFromDistance(sourceLine.getAttribute("x1"),
+  sourceLine.getAttribute("x2"),
+  sourceLine.getAttribute("y1"),
+  sourceLine.getAttribute("y2"),
+  incerment)
+  //get the slope of the line to be repeated
+  var slope = ( parseFloat( sourceLine.getAttribute("y2"))  -   sourceLine.getAttribute("y1")
+  ) / (  sourceLine.getAttribute("x2")
+  - sourceLine.getAttribute("x1"));
+  //solve for the remaining one
+  if(newx2==null){
+    newx2=newx1+Math.sqrt(Math.pow(slope,2)-Math.pow((newy2-newy1),2))
+  }
+  else{
+    newy2=newx2=newx1+newy1
+  }
+  return makeSingleLine(newx1,newx2,newy1,newy2)
 
+}
 makeBaseLines();
 //makeEightLines();
 drawLines(mlines);
-
-drawLines(makeRepeatingLines(mlines[0],mlines[1],mlines[2],10))
+console.log(makeRepeatingLines(mlines[0],mlines[1],10))
+drawLines(makeRepeatingLines(mlines[0],mlines[1],10))
 //drawLines(horShift(mlines[1],10))
 
 
