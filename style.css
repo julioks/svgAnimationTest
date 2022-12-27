@@ -3,15 +3,22 @@ line{
     stroke-width: 5;
     transition: smooth 5s;
 }
-h1{
+h2{
     font-family: 'Open Sans', sans-serif;
  margin: 0;
- position: fixed; /* or absolute */
+ position: absolute; /* or absolute */
   top: 50%;
   left: 50%;
   color: rgb(23, 22, 22);
-  font-size: min(33vh,45vw);
-  transform: translate(-50%, -50%);
+  font-size: min(15vh,25vw);
+}
+#lo1{
+    top: 15%;
+    left: 45%;
+}
+#lo2{
+    top: 15%;
+    left: 65%;
 }
 svg{
     position: absolute; 
@@ -23,5 +30,15 @@ body{
 }
 .lineclass{
     stroke: rgb(176, 10, 46);
+    stroke-width: 1px;
+}
+.repeaterLine{
+    z-index: -1;
+    position: inherit;
+    stroke-width: 1px;
+}
+.baseLine{
+    z-index: 2;
+    position: inherit;
     stroke-width: 1px;
 }
