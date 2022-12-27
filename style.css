@@ -7,21 +7,54 @@ h2{
     font-family: 'Open Sans', sans-serif;
  margin: 0;
  position: absolute; /* or absolute */
-  top: 50%;
-  left: 50%;
+
   color: rgb(23, 22, 22);
-  font-size: min(15vh,25vw);
+  font-size: min(10vh,20vw);
+  z-index: 10;
 }
 #lo1{
-    top: 15%;
-    left: 45%;
+    top:50%;
+    left: 50%;
+    translate: -100% -150%;
 }
-#lo2{
-    top: 15%;
-    left: 65%;
+#lo2{top:50%;
+    left: 50%;
+    translate: 10% -150%;
 }
+#lo3{
+    
+    left: 50%;
+    top:50%;
+    translate: 100% -80%;
+}
+#lo4{
+    left: 50%;
+    top:50%;
+    translate: 100% -10%;
+}#lo5{
+    
+    top:100%;
+    left: 50%;
+    translate: 10% -300%;
+}
+#lo6{top:100%;
+    left: 50%;
+    translate: -100% -300%;
+}#lo7{
+    
+    left: 50%;
+    top:50%;
+    translate: -200% -80%;
+}
+#lo8{
+    left: 50%;
+    top:50%;
+    translate: -200% -10%;
+}
+
 svg{
     position: absolute; 
+    overflow: hidden;
 }
 body{
     transition: smooth 2s;

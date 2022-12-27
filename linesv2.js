@@ -242,7 +242,14 @@ var inc =20
 //console.log(makeRepeatingLines(mlines[0],mlines[1],10))
 console.log()
 var repLines=[]
-
+function deleteChild(e) {
+  
+  var first = e.firstElementChild;
+  while (first) {
+      first.remove();
+      first = e.firstElementChild;
+  }
+}
 repLines.push(makeRepeatingLines(mlines[0],mlines[1],inc))
 repLines.push(makeRepeatingLines(mlines[1],mlines[2],inc))
 repLines.push(makeRepeatingLines(mlines[2],mlines[3],inc))
@@ -266,8 +273,13 @@ repLines.forEach(element => {
 });
 drawLines(mlines);
 window.addEventListener('resize', function(event) {
+  console.log("fired")
+  deleteChild(vbox)
+
+vbox.setAttribute("height",window.innerHeight)
+vbox.setAttribute("width",window.innerWidth)
   console.log(event)
-  mlines=null
+  mlines=[]
   makeBaseLines();
 //makeEightLines();
 
