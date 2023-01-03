@@ -359,7 +359,7 @@ function animateMainLines(lines,increment){
     mlines=[]
     makeBaseLines();
     drawLines(mlines);
-    animateMainLines(document.getElementsByClassName("baseLine"),10)
+    animateMainLines(document.getElementsByClassName("baseLine"),5)
   //makeEightLines();
   function baseAnimsDone(){
     var inc =20
@@ -388,6 +388,6 @@ function animateMainLines(lines,increment){
     repLines.forEach(element => {
       drawLines(element)
     });
-    animateSecondaryLines(document.getElementsByClassName("repeaterLine"),25)
+    animateSecondaryLines(document.getElementsByClassName("repeaterLine"),10)
   }
  
