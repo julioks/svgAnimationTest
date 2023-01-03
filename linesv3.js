@@ -168,7 +168,7 @@ function makeRepeatingLines(sourceLine,repeatedLine,incerment){
   
   let repeats=size/incerment
   console.log(size,incerment,repeats)
-  for (let i = 0; i < repeats; i++) {
+  for (let i = 1; i < repeats; i++) {
     if (parseFloat( sourceLine.getAttribute("x2"))==parseFloat( repeatedLine.getAttribute("x2"))) {
       newx2=parseFloat( sourceLine.getAttribute("x2"))
       size=JSON.parse(JSON.stringify(Math.abs(newx2-sourceLine.getAttribute("x1")))) 
@@ -266,22 +266,30 @@ function animateMainLines(lines,increment){
         var y1=parseFloat(singleLine.getAttribute("y1"));
         var distance=calcDistance(x1,x2,y1,y2)
         randominterval=randominterval+distance
-        if (x1==x2t||y1==y2t) {
-          x2=xFromDistance(x1,x2t,y1,y2t,randominterval)
-          y2=yFromDistance(x1,x2,y1,y2t,randominterval)
-         
+        if (Math.abs(x2t-x2)<=10) {
+          x2=x2t
+  
         }else{
           x2=xFromDistance(x1,x2t,y1,y2t,randominterval)
-          y2=yFromX(x1,y1,x2t,y2t,x2)
         }
-       
-        
-        
-        
-       
-        console.log(singleLine)
-        if (Math.abs(x2t-x2)<=Math.abs(increment+1)) {
+        if (Math.abs(y2t-y2)<=10) {
+  
+          y2=y2t
+  
+        }
+        else{
+          if (x1==x2t||y1==y2t) {
+         
+            y2=yFromDistance(x1,x2,y1,y2t,randominterval)
+           
+          }else{
+            
+            y2=yFromX(x1,y1,x2t,y2t,x2)
+          }
+        }
+        if (Math.abs(x2t-x2)<=10&&Math.abs(y2t-y2)<=10) {
           x2=x2t
+          y2=y2t
           count++;
         }
         singleLine.setAttribute("x2",x2)
@@ -313,29 +321,47 @@ function animateMainLines(lines,increment){
         var y1=parseFloat(singleLine.getAttribute("y1"));
         var distance=calcDistance(x1,x2,y1,y2)
         randominterval=randominterval+distance
-        if (x1==x2t||y1==y2t) {
-          x2=xFromDistance(x1,x2t,y1,y2t,randominterval)
-          y2=yFromDistance(x1,x2,y1,y2t,randominterval)
-         
+        
+       
+        
+        
+        
+  
+        if (Math.abs(x2t-x2)<=10) {
+          x2=x2t
+  
         }else{
           x2=xFromDistance(x1,x2t,y1,y2t,randominterval)
-          y2=yFromX(x1,y1,x2t,y2t,x2)
         }
-       
-        
-        
-        
-       
-        console.log(singleLine)
-        if (Math.abs(x2t-x2)<=Math.abs(10)) {
+        if (Math.abs(y2t-y2)<=10) {
+  
+          y2=y2t
+  
+        }
+        else{
+          if (x1==x2t||y1==y2t) {
+         
+            y2=yFromDistance(x1,x2,y1,y2t,randominterval)
+           
+          }else{
+            
+            y2=yFromX(x1,y1,x2t,y2t,x2)
+          }
+        }
+        if (Math.abs(x2t-x2)<=10&&Math.abs(y2t-y2)<=10) {
           x2=x2t
+          y2=y2t
           count++;
         }
         singleLine.setAttribute("x2",x2)
         singleLine.setAttribute("y2",y2);
       }
    if(count<lines.length){
+  
     window.requestAnimationFrame(animationStep)
+   }
+   else{
+    console.log("oh lawdy it stopped!!!")
    }
   
     }
