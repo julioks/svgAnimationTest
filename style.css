@@ -68,7 +68,7 @@ body{
 .repeaterLine{
     z-index: -1;
     position: inherit;
-    stroke-width: 1.5px;
+    stroke-width: 1px;
 }
 .baseLine{
     z-index: 20;
