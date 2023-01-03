@@ -235,13 +235,7 @@ if(newx2==null){
   return retLines
 
 }
-makeBaseLines();
-//makeEightLines();
 
-var inc =20
-//console.log(makeRepeatingLines(mlines[0],mlines[1],10))
-console.log()
-var repLines=[]
 function deleteChild(e) {
   
   var first = e.firstElementChild;
@@ -250,30 +244,8 @@ function deleteChild(e) {
       first = e.firstElementChild;
   }
 }
-repLines.push(makeRepeatingLines(mlines[0],mlines[1],inc))
-repLines.push(makeRepeatingLines(mlines[1],mlines[2],inc))
-repLines.push(makeRepeatingLines(mlines[2],mlines[3],inc))
-repLines.push(makeRepeatingLines(mlines[3],mlines[4],inc))
-repLines.push(makeRepeatingLines(mlines[4],mlines[5],inc))
-repLines.push(makeRepeatingLines(mlines[5],mlines[6],inc))
-repLines.push(makeRepeatingLines(mlines[6],mlines[7],inc))
-repLines.push(makeRepeatingLines(mlines[7],mlines[0],inc))
 
-repLines.push(makeRepeatingLines(mlines[0],mlines[7],inc))
-repLines.push(makeRepeatingLines(mlines[1],mlines[0],inc))
-repLines.push(makeRepeatingLines(mlines[2],mlines[1],inc))
-repLines.push(makeRepeatingLines(mlines[3],mlines[2],inc))
-repLines.push(makeRepeatingLines(mlines[4],mlines[3],inc))
-repLines.push(makeRepeatingLines(mlines[5],mlines[4],inc))
-repLines.push(makeRepeatingLines(mlines[6],mlines[5],inc))
-repLines.push(makeRepeatingLines(mlines[7],mlines[6],inc))
 
-repLines.forEach(element => {
-  drawLines(element)
-});
-drawLines(mlines);
-window.addEventListener('resize', function(event) {
-  console.log("fired")
   deleteChild(vbox)
 
 vbox.setAttribute("height",window.innerHeight)
@@ -281,6 +253,7 @@ vbox.setAttribute("width",window.innerWidth)
   console.log(event)
   mlines=[]
   makeBaseLines();
+  drawLines(mlines);
 //makeEightLines();
 
 var inc =20
@@ -309,9 +282,7 @@ repLines.push(makeRepeatingLines(mlines[7],mlines[6],inc))
 repLines.forEach(element => {
   drawLines(element)
 });
-drawLines(mlines);
-}, true);
+
+
 //drawLines(makeRepeatingLines(mlines[2],mlines[3],10))
 //drawLines(horShift(mlines[1],10)
-
-

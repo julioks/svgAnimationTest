@@ -1,8 +1,6 @@
 //its ok, but it doesnt look great imo, cause its a bi close together
 //on the angled parts, as its a bit too close on either the x or y axis
 //try to make the increment based on x/y
-//or make the sidewys lines go at 45deg angle
-////fix the randomgrow 
 
 let body = document.body;
 var mlines=[];
@@ -30,6 +28,7 @@ function makeSingleLine(x1,x2,y1,y2,color,cssClass) {
     svgline.setAttribute("style","stroke:"+color+" !important")
     return svgline;
 }
+
 function makeBaseLines() {
     mlines.push(makeSingleLine(window.innerWidth/2,
     window.innerWidth/2,
@@ -74,14 +73,12 @@ function drawLines(lines) {
     body.append(vbox);
 }
 function randomGrow(lines) {
-  var mininc=1
-  var maxinc = 5
     lines=lines.sort((a, b) => 0.5 - Math.random());
     function step(){
         var count=0;
     lines.forEach(element => {
         let nx2=Math.min(parseInt(element.getAttribute("x2t")),parseInt(element.getAttribute("x2"))+randomIntFromInterval(mininc,maxinc))
-      console.log(element, element.getAttribute("x2t"),parseInt(element.getAttribute("x2")))
+
         /**x1*/
         
         let ny2=Math.min(yFromX(parseFloat(element.getAttribute("x1")),
@@ -92,7 +89,7 @@ function randomGrow(lines) {
         if (ny2+mininc+maxinc>parseInt(element.getAttribute("y2t"))) {
             count++ 
         }
-       console.log(ny2, nx2)
+       
         element.setAttribute("y2",ny2)
         element.setAttribute("x2",nx2)
      
@@ -108,6 +105,11 @@ function randomGrow(lines) {
 }
 function yFromX(x1,y1,x2t,y2t,nx) {
     //find m and b for y=mx+b
+    x1=parseFloat(x1);
+    x2t=parseFloat(x2t);
+    y1=parseFloat(y1);
+    y2t=parseFloat(y2t);
+    nx=parseFloat(nx);
     var gradient = (y2t - y1) / (x2t - x1);//m
     var intercept = y1 - (gradient * x1);//b
     return gradient * nx + intercept;//new y = m*newx + b
@@ -145,57 +147,62 @@ function yFromX(x1,y1,x2t,y2t,nx) {
   function calcDistance(x1,x2,y1,y2) {
     return Math.sqrt((Math.pow((x2-x1),2)+Math.pow((y2-y1),2)))
   }
+  function randomIntFromInterval(min, max) { // min and max included 
+    return Math.floor(Math.random() * (max - min + 1) + min)
+  }
 function makeRepeatingLines(sourceLine,repeatedLine,incerment){
   //check which part is shared
   var newx1,newx2,newy1,newy2,size
   console.log(repeatedLine);
-  if (parseFloat( sourceLine.getAttribute("x2t"))==parseFloat( repeatedLine.getAttribute("x2t"))) {
-    newx2=parseFloat( sourceLine.getAttribute("x2t"))
-    size=calcDistance(sourceLine.getAttribute("x1"),sourceLine.getAttribute("x2t"),sourceLine.getAttribute("y1"),sourceLine.getAttribute("y2t"))
-    console.log("xissame",newx2)
+  if (parseFloat( sourceLine.getAttribute("x2"))==parseFloat( repeatedLine.getAttribute("x2"))) {
+    newx2=parseFloat( sourceLine.getAttribute("x2"))
+    size=calcDistance(sourceLine.getAttribute("x1"),sourceLine.getAttribute("x2"),sourceLine.getAttribute("y1"),sourceLine.getAttribute("y2"))
+    
   }
   else{
-    newy2=parseFloat( sourceLine.getAttribute("y2t"))
-    size=calcDistance(sourceLine.getAttribute("x1"),sourceLine.getAttribute("x2t"),sourceLine.getAttribute("y1"),sourceLine.getAttribute("y2t"))
-    console.log("yissame",newy2)
+    newy2=parseFloat( sourceLine.getAttribute("y2"))
+    size=calcDistance(sourceLine.getAttribute("x1"),sourceLine.getAttribute("x2"),sourceLine.getAttribute("y1"),sourceLine.getAttribute("y2"))
+    
   }
   var retLines=[]
- 
-  for (let i = 0; i < size/incerment; i++) {
-    if (parseFloat( sourceLine.getAttribute("x2t"))==parseFloat( repeatedLine.getAttribute("x2t"))) {
-      newx2=parseFloat( sourceLine.getAttribute("x2t"))
+  
+  let repeats=size/incerment
+  console.log(size,incerment,repeats)
+  for (let i = 0; i < repeats; i++) {
+    if (parseFloat( sourceLine.getAttribute("x2"))==parseFloat( repeatedLine.getAttribute("x2"))) {
+      newx2=parseFloat( sourceLine.getAttribute("x2"))
       size=JSON.parse(JSON.stringify(Math.abs(newx2-sourceLine.getAttribute("x1")))) 
-      console.log("xissame",newx2)
+    
     }
     else{
-      newy2=parseFloat( sourceLine.getAttribute("y2t"))
+      newy2=parseFloat( sourceLine.getAttribute("y2"))
       size=JSON.parse(JSON.stringify(Math.abs(newy2-sourceLine.getAttribute("y1")))) 
-      console.log("yissame",newy2)
+      
     }
      //get x1 and y1
   newx1=xFromDistance(parseFloat( sourceLine.getAttribute("x1")),
-  parseFloat( sourceLine.getAttribute("x2t")),
+  parseFloat( sourceLine.getAttribute("x2")),
   parseFloat( sourceLine.getAttribute("y1")),
-  parseFloat( sourceLine.getAttribute("y2t")),
+  parseFloat( sourceLine.getAttribute("y2")),
   incerment*i)
   newy1=yFromDistance(parseFloat( sourceLine.getAttribute("x1")),
-  parseFloat( sourceLine.getAttribute("x2t")),
+  parseFloat( sourceLine.getAttribute("x2")),
   parseFloat( sourceLine.getAttribute("y1")),
-  parseFloat( sourceLine.getAttribute("y2t")),
+  parseFloat( sourceLine.getAttribute("y2")),
   incerment*i)
   
   //get the slope of the line to be repeated
-  var slope = ( parseFloat( repeatedLine.getAttribute("y2t"))  -   repeatedLine.getAttribute("y1")) / (  repeatedLine.getAttribute("x2t") - repeatedLine.getAttribute("x1"));
+  var slope = ( parseFloat( repeatedLine.getAttribute("y2"))  -   repeatedLine.getAttribute("y1")) / (  repeatedLine.getAttribute("x2") - repeatedLine.getAttribute("x1"));
   if (!isFinite(slope)) {
     newx1=xFromDistance(parseFloat( sourceLine.getAttribute("x1")),
-    parseFloat( sourceLine.getAttribute("x2t")),
+    parseFloat( sourceLine.getAttribute("x2")),
     parseFloat( sourceLine.getAttribute("y1")),
-    parseFloat( sourceLine.getAttribute("y2t")),
+    parseFloat( sourceLine.getAttribute("y2")),
     incerment*i)
     newy1=yFromDistance(parseFloat( sourceLine.getAttribute("x1")),
-    parseFloat( sourceLine.getAttribute("x2t")),
+    parseFloat( sourceLine.getAttribute("x2")),
     parseFloat( sourceLine.getAttribute("y1")),
-    parseFloat( sourceLine.getAttribute("y2t")),
+    parseFloat( sourceLine.getAttribute("y2")),
     incerment*i)
     
     slope=Math.sign(slope)
@@ -226,51 +233,161 @@ if(newx2==null){
  }
   }
   console.log(sourceLine.getAttribute('style').slice(7,14))
-  retLines.push(makeSingleLine(newx1,newx2,newy1,newy2,sourceLine.getAttribute('style').slice(7,14),"repeaterLine"))
+  var ltomake=makeSingleLine(newx1,newx2,newy1,newy2,sourceLine.getAttribute('style').slice(7,14),"repeaterLine")
+  retLines.push(ltomake)
   newx1=null;
   newx2=null;
   newy1=null;
   newy2=null;
+ 
   }
 
 
   return retLines
 
 }
-function randomIntFromInterval(min, max) { // min and max included 
-  return Math.floor(Math.random() * (max - min + 1) + min)
-}
-makeBaseLines();
-//makeEightLines();
+//might have to only make the repeater lines when the main ones are drawn
+function animateMainLines(lines,increment){
 
-var inc =20
-//console.log(makeRepeatingLines(mlines[0],mlines[1],10))
-console.log()
-drawLines(mlines)
-randomGrow(mlines)
-var repLines=[]
-
-repLines.push(makeRepeatingLines(mlines[0],mlines[1],inc))
-repLines.push(makeRepeatingLines(mlines[1],mlines[2],inc))
-repLines.push(makeRepeatingLines(mlines[2],mlines[3],inc))
-repLines.push(makeRepeatingLines(mlines[3],mlines[4],inc))
-repLines.push(makeRepeatingLines(mlines[4],mlines[5],inc))
-repLines.push(makeRepeatingLines(mlines[5],mlines[6],inc))
-repLines.push(makeRepeatingLines(mlines[6],mlines[7],inc))
-repLines.push(makeRepeatingLines(mlines[7],mlines[0],inc))
-
-repLines.push(makeRepeatingLines(mlines[0],mlines[7],inc))
-repLines.push(makeRepeatingLines(mlines[1],mlines[0],inc))
-repLines.push(makeRepeatingLines(mlines[2],mlines[1],inc))
-repLines.push(makeRepeatingLines(mlines[3],mlines[2],inc))
-repLines.push(makeRepeatingLines(mlines[4],mlines[3],inc))
-repLines.push(makeRepeatingLines(mlines[5],mlines[4],inc))
-repLines.push(makeRepeatingLines(mlines[6],mlines[5],inc))
-repLines.push(makeRepeatingLines(mlines[7],mlines[6],inc))
-
-//drawLines(mlines);
-
-//drawLines(makeRepeatingLines(mlines[2],mlines[3],10))
-//drawLines(horShift(mlines[1],10)
+    window.requestAnimationFrame(animationStep)
 
 
+    function animationStep(){
+      var count=0
+      var randominterval=randomIntFromInterval(1,increment)
+      for (let i = 0; i < lines.length; i++) {
+        randominterval=randomIntFromInterval(1,increment)
+        const singleLine = lines[i];
+        var x2=parseFloat(singleLine.getAttribute("x2"));
+        var y2=parseFloat(singleLine.getAttribute("y2"));
+        var x2t=parseFloat(singleLine.getAttribute("x2t"));
+        var y2t=parseFloat(singleLine.getAttribute("y2t"));
+        var x1=parseFloat(singleLine.getAttribute("x1"));
+        var y1=parseFloat(singleLine.getAttribute("y1"));
+        var distance=calcDistance(x1,x2,y1,y2)
+        randominterval=randominterval+distance
+        if (x1==x2t||y1==y2t) {
+          x2=xFromDistance(x1,x2t,y1,y2t,randominterval)
+          y2=yFromDistance(x1,x2,y1,y2t,randominterval)
+         
+        }else{
+          x2=xFromDistance(x1,x2t,y1,y2t,randominterval)
+          y2=yFromX(x1,y1,x2t,y2t,x2)
+        }
+       
+        
+        
+        
+       
+        console.log(singleLine)
+        if (Math.abs(x2t-x2)<=Math.abs(increment+1)) {
+          x2=x2t
+          count++;
+        }
+        singleLine.setAttribute("x2",x2)
+        singleLine.setAttribute("y2",y2);
+      }
+   if(count<lines.length){
+    window.requestAnimationFrame(animationStep)
+   }
+   else{
+    baseAnimsDone()
+   }
+    }
+  }function animateSecondaryLines(lines,increment){
+
+    window.requestAnimationFrame(animationStep)
+
+
+    function animationStep(){
+      var count=0
+      var randominterval=randomIntFromInterval(1,increment)
+      for (let i = 0; i < lines.length; i++) {
+        randominterval=randomIntFromInterval(1,increment)
+        const singleLine = lines[i];
+        var x2=parseFloat(singleLine.getAttribute("x2"));
+        var y2=parseFloat(singleLine.getAttribute("y2"));
+        var x2t=parseFloat(singleLine.getAttribute("x2t"));
+        var y2t=parseFloat(singleLine.getAttribute("y2t"));
+        var x1=parseFloat(singleLine.getAttribute("x1"));
+        var y1=parseFloat(singleLine.getAttribute("y1"));
+        var distance=calcDistance(x1,x2,y1,y2)
+        randominterval=randominterval+distance
+        if (x1==x2t||y1==y2t) {
+          x2=xFromDistance(x1,x2t,y1,y2t,randominterval)
+          y2=yFromDistance(x1,x2,y1,y2t,randominterval)
+         
+        }else{
+          x2=xFromDistance(x1,x2t,y1,y2t,randominterval)
+          y2=yFromX(x1,y1,x2t,y2t,x2)
+        }
+       
+        
+        
+        
+       
+        console.log(singleLine)
+        if (Math.abs(x2t-x2)<=Math.abs(10)) {
+          x2=x2t
+          count++;
+        }
+        singleLine.setAttribute("x2",x2)
+        singleLine.setAttribute("y2",y2);
+      }
+   if(count<lines.length){
+    window.requestAnimationFrame(animationStep)
+   }
+  
+    }
+  }
+
+  function deleteChild(e) {
+  
+    var first = e.firstElementChild;
+    while (first) {
+        first.remove();
+        first = e.firstElementChild;
+    }
+  }
+  
+  
+    deleteChild(vbox)
+  
+  vbox.setAttribute("height",window.innerHeight)
+  vbox.setAttribute("width",window.innerWidth)
+    console.log(event)
+    mlines=[]
+    makeBaseLines();
+    drawLines(mlines);
+    animateMainLines(document.getElementsByClassName("baseLine"),10)
+  //makeEightLines();
+  function baseAnimsDone(){
+    var inc =20
+    //console.log(makeRepeatingLines(mlines[0],mlines[1],10))
+    console.log()
+    var repLines=[]
+    
+    repLines.push(makeRepeatingLines(mlines[0],mlines[1],inc))
+    repLines.push(makeRepeatingLines(mlines[1],mlines[2],inc))
+    repLines.push(makeRepeatingLines(mlines[2],mlines[3],inc))
+    repLines.push(makeRepeatingLines(mlines[3],mlines[4],inc))
+    repLines.push(makeRepeatingLines(mlines[4],mlines[5],inc))
+    repLines.push(makeRepeatingLines(mlines[5],mlines[6],inc))
+    repLines.push(makeRepeatingLines(mlines[6],mlines[7],inc))
+    repLines.push(makeRepeatingLines(mlines[7],mlines[0],inc))
+    
+    repLines.push(makeRepeatingLines(mlines[0],mlines[7],inc))
+    repLines.push(makeRepeatingLines(mlines[1],mlines[0],inc))
+    repLines.push(makeRepeatingLines(mlines[2],mlines[1],inc))
+    repLines.push(makeRepeatingLines(mlines[3],mlines[2],inc))
+    repLines.push(makeRepeatingLines(mlines[4],mlines[3],inc))
+    repLines.push(makeRepeatingLines(mlines[5],mlines[4],inc))
+    repLines.push(makeRepeatingLines(mlines[6],mlines[5],inc))
+    repLines.push(makeRepeatingLines(mlines[7],mlines[6],inc))
+    
+    repLines.forEach(element => {
+      drawLines(element)
+    });
+    animateSecondaryLines(document.getElementsByClassName("repeaterLine"),25)
+  }
+ 
